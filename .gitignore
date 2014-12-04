@@ -1,0 +1,36 @@
+# ignore Makefiles
+*Makefile.in
+*Makefile
+
+# ignore object files and .deps and .libs directories
+*.o
+*.Po
+*.lo
+*.la
+*.deps
+*.libs
+
+# ignore extra dist directories and files
+autom4te.cache/
+config.h
+config.log
+config.status
+config.guess
+libtool
+stamp-h1
+aclocal.m4
+Makefile.in
+configure
+m4
+m4/*
+depcomp
+config.h.in
+config.sub
+install-sh
+ltmain.sh
+missing
+compile
+
+# ignore temp files for editors
+*.swp
+*~
