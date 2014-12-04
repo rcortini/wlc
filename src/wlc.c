@@ -1,3 +1,21 @@
+/* wlc, a simple library to calculate worm-like chain polymer functions
+ *
+ * Copyright (C) 2014  Ruggero Cortini
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <stdio.h>
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
@@ -9,7 +27,7 @@
 
 /***************************************************************
  *                                                             *
- *  WLC library, by Ruggero Cortini (cortini@lptl.jussieu.fr)  *
+ *  wlc library, by Ruggero Cortini (cortini@lptl.jussieu.fr)  *
  *                                                             *
  *  Formulas derived mainly from the research article          *
  *  J. Marko, E. Siggia, "Stretching DNA", Macromolecules 28   *
@@ -33,9 +51,9 @@ double wlc_g_min_handle (double x, void *params) {
   double ex;
   double F = p [0];
   double lpb = p [1];
-  gsl_complex z;
+  gsl_complex z, zex;
   GSL_SET_COMPLEX (&z, 4*x, 0);
-  gsl_complex zex = gsl_complex_coth (z);
+  zex = gsl_complex_coth (z);
   ex = GSL_REAL (zex);
   return (x/(2*lpb) - F)*(ex - 1/(2*x));
 }
