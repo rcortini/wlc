@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(wlc, 0.0.0, cortini@lptl.jussieu.fr)
+AC_INIT(wlc, 0.0.1, cortini@lptl.jussieu.fr)
 AC_CONFIG_SRCDIR([src/wlc.c])
 AC_CONFIG_HEADERS([config.h])
 
@@ -14,7 +14,25 @@ LT_INIT
 # Checks for libraries.
 AC_CHECK_LIB(c, main)
 AC_CHECK_LIB(m, [sqrt])
-CFLAGS="-Wall -g -O0 -Wextra -Wshadow"
+
+# Global CFLAGS: thanks to Svyatoslav Kondrat for this part of the code
+WARN_FLAGS="-Wall -Wextra -Wshadow -Wno-variadic-macros --pedantic"
+CFLAGS="$WARN_FLAGS -O2"
+CFLAGS_save="$CFLAGS"
+
+# enable "optimize option", which will compile using only the -O3 option
+AC_ARG_ENABLE([optimize],
+    [AC_HELP_STRING([--enable-optimize],
+	    [disable debugging (removes -g flags), disable compiler warnings\
+	     and set optimization level O3 (disabled)])],
+    [CFLAGS="-O3"], [CFLAGS="$CFLAGS_save"])
+
+# enable "more-debug", which will compile using extra debugging options
+CFLAGS_save="$CFLAGS"
+AC_ARG_ENABLE([more-debug],
+    [AC_HELP_STRING([--enable-more-debug],
+	    [enable more debugging information (disabled)])],
+     [CFLAGS="$WARN_FLAGS -g3 -ggdb -O0"], [CFLAGS="$CFLAGS_save"])
 
 # check for GSL
 AC_ARG_WITH(gsl,
