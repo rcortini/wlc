@@ -7,6 +7,18 @@
 #include "wlc.h"
 
 
+/***************************************************************
+ *                                                             *
+ *  WLC library, by Ruggero Cortini (cortini@lptl.jussieu.fr)  *
+ *                                                             *
+ *  Formulas derived mainly from the research article          *
+ *  J. Marko, E. Siggia, "Stretching DNA", Macromolecules 28   *
+ *  (1995), 26: 8759--8770                                     *
+ *  hereafter referred to as "Marko1995".                      *
+ *                                                             *
+ ***************************************************************/
+
+
 
 /****************************************************************
  * EXACT FORMULAE
@@ -14,8 +26,8 @@
 
 
 
-/* this function calculates the function to minimize to calculate the free energy
- * per unit length of a WLC. Equation 14 of Marko1995. */
+/* Function to minimize to obtain the Gibbs free energy per unit length.
+ * Equation 14 of Marko1995. */
 double wlc_g_min_handle (double x, void *params) {
   double *p = (double *) params;
   double ex;
@@ -28,16 +40,13 @@ double wlc_g_min_handle (double x, void *params) {
   return (x/(2*lpb) - F)*(ex - 1/(2*x));
 }
 
-/* calculates the free energy per unit length of a WLC, as a function of the applied end force */
+/* Gibbs free energy per unit length, as a function of the applied end force */
 double wlc_g_F (double F, double lpb) {
   int minimizer_result, iter, max_iter = 100;
   double x_lo, x_hi, x0;
   double fx_lo, fx_hi, fx0;
   double x_min, p [2];
   struct f_min_params fminp;
-
-  /* we are not able to calculate values higher than this one */
-  /* if (F>=WLC_F_MAX) return WLC_G_MAX; */
 
   /* sets all the parameters for the minimizer */
   x_lo = 1e-10;
@@ -103,7 +112,7 @@ double wlc_g_F_handle (double F, void *p) {
   return wlc_g_F (F, *lpb);
 }
 
-/* rho (F) exact = d g_wlc (F)/dF */
+/* rho (F) = -d g_wlc (F)/dF */
 double wlc_rho_F (double F, double lpb) {
   return -f_deriv (F, wlc_g_F_handle, &lpb);
 }
@@ -117,7 +126,7 @@ double wlc_F_rho_handle (double F, void *params) {
 
 /* F (rho) exact is obtained inverting rho (F) exact */
 double wlc_F_rho (double rho, double lpb) {
-  int root_solver_ret_code;
+  int root_solver_ret_code, iter, max_iter = 100;
   double p [2];
   double F, F_guess, x_lo, x_hi, fx_lo, fx_hi;
   struct f_root_params f_root_p;
@@ -139,18 +148,23 @@ double wlc_F_rho (double rho, double lpb) {
 
   /* bounding interval */
   F_guess = wlc_F_rho_interp (rho, lpb);
-  /* TODO : correct these values */
   x_lo = F_guess/2.; /* these are values of FORCE */
   x_hi = F_guess*2.;
 
   /* check that we have a good initial interval */
   fx_lo = wlc_F_rho_handle (x_lo, p);
   fx_hi = wlc_F_rho_handle (x_hi, p);
+  iter = 0;
   while (fx_lo*fx_hi>0.) {
     x_hi *= 2.;
     x_lo /= 2.;
     fx_lo = wlc_F_rho_handle (x_lo, p);
     fx_hi = wlc_F_rho_handle (x_hi, p);
+    iter++;
+    if (iter>max_iter) {
+      fprintf (stderr, "wlc_F_rho: max_iter hit! rho = %f\n", rho);
+      exit (EXIT_FAILURE);
+    }
   }
 
   /* calculate the root in the specified interval */
@@ -166,20 +180,20 @@ double wlc_F_rho (double rho, double lpb) {
 }
 
 
+
 /****************************************************************
  * INTERPOLATION FORMULAE
  ***************************************************************/
 
 
 
-/* this function expresses the relationship between force and relative extension
- * (rho = z/L) in the Worm-like Chain model in an interpolation. Formula due to 
- * J. Marko and E. Siggia, Macromolecules 1995 */
+/* interpolation formula: equation 7 of Marko1995 */
 double wlc_rho_F_interp_handle (double rho, void *params) {
   double *p = (double * ) params;
   double F = p [0];
   double lpb = p [1];
-  return rho + (1./((1.-rho)*(1.-rho)) - 1.)/4. - F*lpb;
+  double y = (1.-rho);
+  return rho + (1./(y*y) - 1.)/4. - F*lpb;
 }
 
 
