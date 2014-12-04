@@ -1,0 +1,3 @@
+* fix behavior of functions when arguments are not in range
+* fix wlc_g_F when F is very large
+* remove WLC_F_MAX and WLC_G_MAX macros
