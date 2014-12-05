@@ -259,8 +259,10 @@ double wlc_rho_F_interp (double F, double lpb) {
 double wlc_F_rho_interp (double rho, double lpb) {
   if (rho>=1.)
     return WLC_F_MAX;
-  else
-    return (rho + (1./((1.-rho)*(1.-rho)) - 1.)/4.)/lpb;
+  else {
+    double y = 1.-rho;
+    return (rho + (1./(y*y) - 1.)/4.)/lpb;
+  }
 }
 
 
