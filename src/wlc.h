@@ -32,6 +32,8 @@ double wlc_rho_F (double F, double lpb);
 
 double wlc_F_rho (double rho, double lpb);
 
+double wlc_g_rho (double rho, double lpb);
+
 /* interpolation formulae */
 double wlc_g_F_interp (double F, double lpb);
 

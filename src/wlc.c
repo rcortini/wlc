@@ -197,6 +197,11 @@ double wlc_F_rho (double rho, double lpb) {
   }
 }
 
+/* calculates the Gibbs free energy as a function of extension */
+double wlc_g_rho (double rho, double lpb) {
+  return wlc_g_F (wlc_F_rho (rho, lpb), lpb);
+}
+
 
 
 /****************************************************************
