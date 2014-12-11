@@ -3,6 +3,9 @@ wlc
 
 C library to compute worm-like chain polymer functions
 
+Depends on the Gnu Scientific Library (GSL), available at
+  http://www.gnu.org/software/gsl/
+
 This library provides fast routines to calculate functions
 related to the worm-like chain model of a semi-flexible polymer.
 
