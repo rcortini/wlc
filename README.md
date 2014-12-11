@@ -23,3 +23,9 @@ Regimes currently available:
   - variational: using the variational formulae derived by Marko and Siggia
   - interpolation
   - high force
+
+Formulas derived mainly from the research article
+J. Marko, E. Siggia, "Stretching DNA", Macromolecules 28
+(1995), 26: 8759--8770
+hereafter referred to as "Marko1995".
+ 
