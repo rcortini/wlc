@@ -38,3 +38,6 @@ compile
 # ignore pkgconfig scripts
 wlc.pc
 wlc-config
+
+# programs
+wlc/wlc

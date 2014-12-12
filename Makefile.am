@@ -1,4 +1,4 @@
-SUBDIRS = src
+SUBDIRS = src wlc
 
 bin_SCRIPTS=wlc-config
 
