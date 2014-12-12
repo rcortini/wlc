@@ -6,10 +6,16 @@ AC_INIT(wlc, 0.0.1, cortini@lptl.jussieu.fr)
 AC_CONFIG_SRCDIR([src/wlc.c])
 AC_CONFIG_HEADERS([config.h])
 
+PACKAGE=wlc
+VERSION=0.0.1
+
 # Checks for programs.
 AC_PROG_CC
 AM_INIT_AUTOMAKE
 LT_INIT
+
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
 
 # Checks for libraries.
 AC_CHECK_LIB(c, main)
@@ -58,6 +64,12 @@ AC_SUBST(GSL_LIBS)
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdlib.h math.h])
+WLC_CFLAGS="-I$includedir"
+WLC_LIBS="-L$libdir -lwlc"
+
+AC_SUBST(WLC_CFLAGS)
+AC_SUBST(WLC_LIBS)
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -66,5 +78,5 @@ AC_C_CONST
 AC_FUNC_MALLOC
 
 # output
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile wlc-config wlc.pc])
 AC_OUTPUT

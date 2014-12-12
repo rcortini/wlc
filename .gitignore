@@ -34,3 +34,7 @@ compile
 # ignore temp files for editors
 *.swp
 *~
+
+# ignore pkgconfig scripts
+wlc.pc
+wlc-config

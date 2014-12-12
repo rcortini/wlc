@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: wlc
+Description: Worm-like chain polymer functions calculation
+Version: @VERSION@
+Libs: @WLC_LIBS@ @LIBS@
+Cflags: @WLC_CFLAGS@
