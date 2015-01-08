@@ -50,7 +50,7 @@ int main (int argc, char *argv []) {
   const char *program_name = "wlc";
 
   if (argc < 2) {
-    fprintf (stderr, "Incorrect usage\n");
+    wlc_error ("Incorrect usage\n");
     print_usage (program_name);
     exit (EXIT_FAILURE);
   }
@@ -85,7 +85,7 @@ int main (int argc, char *argv []) {
 
     /* check that we have sufficient arguments */
     if (optind+2>=argc) {
-      fprintf (stderr, "Incorrect usage\n");
+      wlc_error ("Incorrect usage\n");
       print_usage (program_name);
       printf ("Usage: wlc [-v] F_rho <rho> <lpb>\n");
       exit (EXIT_FAILURE);
@@ -105,7 +105,7 @@ int main (int argc, char *argv []) {
       printf ("%.5e\n", F);
   }
   else {
-    fprintf (stderr, "Incorrect usage\n");
+    wlc_error ("Incorrect usage\n");
     print_usage (program_name);
     exit (EXIT_FAILURE);
   }

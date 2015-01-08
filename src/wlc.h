@@ -55,4 +55,9 @@ double wlc_rho_F_highforce (double F, double lpb);
 
 double wlc_F_rho_highforce (double rho, double lpb);
 
+/* output functions defined in utils.c */
+void wlc_message (char *text, ...);
+
+void wlc_error (char *text, ...);
+
 #endif

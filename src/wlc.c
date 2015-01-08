@@ -93,7 +93,7 @@ double wlc_g_F (double F, double lpb) {
     fx_hi = wlc_g_min_handle (x_hi, p);
     iter++;
     if (iter>max_iter) {
-      fprintf (stderr, "wlc_g_F: max_iter hit! F = %f\n", F);
+      wlc_error ("wlc_g_F: max_iter hit! F = %f\n", F);
       exit (EXIT_FAILURE);
     }
   };
@@ -114,7 +114,7 @@ double wlc_g_F (double F, double lpb) {
   if (minimizer_result==GSL_SUCCESS)
     return wlc_g_min_handle (x_min, p);
   else {
-    fprintf (stderr, "wlc_g: minimization failed! F = %f\n", F);
+    wlc_error ("wlc_g: minimization failed! F = %f\n", F);
     exit (EXIT_FAILURE);
   }
 }
@@ -180,7 +180,7 @@ double wlc_F_rho (double rho, double lpb) {
     fx_hi = wlc_F_rho_handle (x_hi, p);
     iter++;
     if (iter>max_iter) {
-      fprintf (stderr, "wlc_F_rho: max_iter hit! rho = %f\n", rho);
+      wlc_error ("wlc_F_rho: max_iter hit! rho = %f\n", rho);
       exit (EXIT_FAILURE);
     }
   }
@@ -192,7 +192,7 @@ double wlc_F_rho (double rho, double lpb) {
   if (root_solver_ret_code==GSL_SUCCESS)
     return F;
   else {
-    fprintf (stderr, "wlc_F_rho: root solver failed! rho = %f", rho);
+    wlc_error ("wlc_F_rho: root solver failed! rho = %f", rho);
     exit (EXIT_FAILURE);
   }
 }
@@ -254,7 +254,7 @@ double wlc_rho_F_interp (double F, double lpb) {
   if (root_solver_ret_code==GSL_SUCCESS)
     return rho;
   else {
-    fprintf (stderr, "wlc_rho_F: root solver failed! F = %f", F);
+    wlc_error ("wlc_rho_F: root solver failed! F = %f", F);
     exit (EXIT_FAILURE);
   }
 }
