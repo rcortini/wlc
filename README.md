@@ -10,7 +10,7 @@ This library provides fast routines to calculate functions
 related to the worm-like chain model of a semi-flexible polymer.
 
 The functions are named
-wlc_<A>_<x>_<regime>
+wlc_A_x_regime
 where A (x) is calculated, in the regime <regime>.
 
 Currently available:
@@ -27,5 +27,6 @@ Regimes currently available:
 Formulas derived mainly from the research article
 J. Marko, E. Siggia, "Stretching DNA", Macromolecules 28
 (1995), 26: 8759--8770
-hereafter referred to as "Marko1995".
+DOI: 10.1021/ma00130a008
  
+Provides also a program to quickly access to function values, named "wlc"
