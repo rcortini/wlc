@@ -13,6 +13,7 @@ VERSION=0.0.1
 AC_PROG_CC
 AM_INIT_AUTOMAKE
 LT_INIT
+AM_PROG_CC_C_O
 
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
@@ -78,5 +79,8 @@ AC_C_CONST
 AC_FUNC_MALLOC
 
 # output
-AC_CONFIG_FILES([Makefile src/Makefile wlc-config wlc.pc])
+AC_CONFIG_FILES([Makefile
+		 src/Makefile
+		 wlc/Makefile
+		 wlc-config wlc.pc])
 AC_OUTPUT

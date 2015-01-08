@@ -19,6 +19,9 @@
 #ifndef __WLCLIB_H__
 #define __WLCLIB_H__
 
+/* Boltzmann constant in erg/K */
+#define K_BOLTZMANN 1.380650400e-16
+
 /* TODO: remove this */
 #define WLC_F_MAX 255.900000
 #define WLC_G_MAX -253.642700
