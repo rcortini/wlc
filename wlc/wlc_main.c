@@ -104,6 +104,31 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", F);
   }
+  if (strcmp (function_name, "rho_F")==0) {
+    double rho, lpb, F;
+
+    /* check that we have sufficient arguments */
+    if (optind+2>=argc) {
+      wlc_error ("Incorrect usage\n");
+      print_usage (program_name);
+      printf ("Usage: wlc [-v] rho_F <F> <lpb>\n");
+      exit (EXIT_FAILURE);
+    }
+    /* if temperature was assigned, convert to pN */
+    F = atof (argv [optind+1]);
+    lpb = atof (argv [optind+2]);
+
+    if (Tflag)
+      F /= (K_BOLTZMANN*T*1.e14);
+
+    rho = wlc_rho_F (F, lpb);
+
+    /* choose how output is given */
+    if (vflag)
+      printf ("F = %.5e lpb = %.5e rho = %.5e\n", F, lpb, rho);
+    else
+      printf ("%.5e\n", rho);
+  }
   else {
     wlc_error ("Incorrect usage\n");
     print_usage (program_name);
