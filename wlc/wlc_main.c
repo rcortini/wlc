@@ -32,6 +32,7 @@ void print_help () {
   printf ("Functions available:\n\n");
   printf ("Exact formulae:\n");
   printf ("\tF_rho <rho> <lpb>: the force as a function of relative extension\n");
+  printf ("\trho_F <F> <lpb>: the relative extension as a function of force\n");
   printf ("\n");
   printf ("Options:\n");
   printf ("\t-v: verbose output\n");
