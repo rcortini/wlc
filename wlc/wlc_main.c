@@ -32,7 +32,10 @@ void print_help () {
   printf ("Functions available:\n\n");
   printf ("Exact formulae:\n");
   printf ("\tF_rho <rho> <lpb>: the force as a function of relative extension\n");
+  printf ("\trho_F <F> <lpb>: the relative extension as a function of force\n");
   printf ("\n");
+  printf ("Cavity theory formulae:\n");
+  printf ("\tcavity_rho_F <F> <bB> <JB>: the relative extension as a function of force\n");
   printf ("Options:\n");
   printf ("\t-v: verbose output\n");
   printf ("\t-h: print this help and exit\n");
