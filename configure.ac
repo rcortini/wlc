@@ -2,12 +2,12 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(wlc, 0.0.1, cortini@lptl.jussieu.fr)
+AC_INIT(wlc, 0.1.0, cortini@lptl.jussieu.fr)
 AC_CONFIG_SRCDIR([src/wlc.c])
 AC_CONFIG_HEADERS([config.h])
 
 PACKAGE=wlc
-VERSION=0.0.1
+VERSION=0.1.0
 
 # Checks for programs.
 AC_PROG_CC
