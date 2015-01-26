@@ -1,6 +1,6 @@
 /* wlc, a simple library to calculate worm-like chain polymer functions
  *
- * Copyright (C) 2014, 2015  Ruggero Cortini
+ * Copyright (C) 2014, 2015  Ruggero Cortini, Francesco A. Massucci
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,5 +59,13 @@ double wlc_F_rho_highforce (double rho, double lpb);
 void wlc_message (char *text, ...);
 
 void wlc_error (char *text, ...);
+
+/* cavity routines for discrete models */
+/* elongation with the cavity method */
+double cavity_rho_F (double, double, double);
+
+/* elongation gradient and persistence length with the cavity method */
+double cavity_rho_F_and_gradient (double, double, double, double *, double *, double *);
+
 
 #endif

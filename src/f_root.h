@@ -1,6 +1,6 @@
 /* wlc, a simple library to calculate worm-like chain polymer functions
  *
- * Copyright (C) 2014, 2015  Ruggero Cortini
+ * Copyright (C) 2014, 2015  Ruggero Cortini, Francesco A. Massucci
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
