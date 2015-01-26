@@ -1,6 +1,6 @@
 /* wlc, a simple library to calculate worm-like chain polymer functions
  *
- * Copyright (C) 2014, 2015  Ruggero Cortini
+ * Copyright (C) 2014, 2015  Ruggero Cortini, Francesco A. Massucci
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ void print_help () {
   printf ("\tF_rho <rho> <lpb>: the force as a function of relative extension\n");
   printf ("\trho_F <F> <lpb>: the relative extension as a function of force\n");
   printf ("\n");
+  printf ("Cavity theory formulae:\n");
+  printf ("\tcavity_rho_F <F> <bB> <JB>: the relative extension as a function of force\n");
   printf ("Options:\n");
   printf ("\t-v: verbose output\n");
   printf ("\t-h: print this help and exit\n");
@@ -105,7 +107,7 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", F);
   }
-  if (strcmp (function_name, "rho_F")==0) {
+  else if (strcmp (function_name, "rho_F")==0) {
     double rho, lpb, F;
 
     /* check that we have sufficient arguments */
@@ -130,6 +132,59 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", rho);
   }
+  else if (strcmp (function_name, "cavity_rho_F")==0) {
+    double rho, JB, bB, F;
+
+    /* check that we have sufficient arguments */
+    if (optind+3>=argc) {
+      wlc_error ("Incorrect usage\n");
+      print_usage (program_name);
+      printf ("Usage: wlc [-v] cavity_rho_F <F> <bB> <JB>\n");
+      exit (EXIT_FAILURE);
+    }
+    /* if temperature was assigned, convert to pN */
+    F = atof (argv [optind+1]);
+    bB = atof (argv [optind+2]);
+    JB = atof (argv [optind+3]);
+
+    if (Tflag)
+      F /= (K_BOLTZMANN*T*1.e14);
+
+    rho = cavity_rho_F (F, bB, JB);
+
+    /* choose how output is given */
+    if (vflag)
+      printf ("F = %.5e bB = %.5e JB = %.5e rho = %.5e\n", F, bB, JB, rho);
+    else
+      printf ("%.5e\n", rho);
+  }
+  else if (strcmp (function_name, "cavity_rho_F_and_gradient")==0) {
+    double rho, JB, bB, F, drho_dbB, drho_dJB, xi_f;
+
+    /* check that we have sufficient arguments */
+    if (optind+3>=argc) {
+      wlc_error ("Incorrect usage\n");
+      print_usage (program_name);
+      printf ("Usage: wlc [-v] cavity_rho_F_and_gradient <F> <bB> <JB>\n");
+      exit (EXIT_FAILURE);
+    }
+    /* if temperature was assigned, convert to pN */
+    F = atof (argv [optind+1]);
+    bB = atof (argv [optind+2]);
+    JB = atof (argv [optind+3]);
+
+    if (Tflag)
+      F /= (K_BOLTZMANN*T*1.e14);
+
+    rho = cavity_rho_F_and_gradient (F, bB, JB, &drho_dbB, &drho_dJB, &xi_f);
+
+    /* choose how output is given */
+    if (vflag)
+      printf ("F = %.5e bB = %.5e JB = %.5e drho_dbB = %.5e drho_dJB = %.5e xi_f = %.5e rho = %.5e\n", F, bB, JB, drho_dbB, drho_dJB, xi_f, rho);
+    else
+      printf ("%.5e\n", rho);
+  }
+
   else {
     wlc_error ("Incorrect usage\n");
     print_usage (program_name);
