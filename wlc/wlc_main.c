@@ -24,6 +24,7 @@
 
 void print_usage (const char *program_name) {
   printf ("Usage: %s [-v] [-T <temperature>] <function> <function arguments>\n", program_name);
+  printf ("\tfunctions available: rho_F, F_rho, cavity_rho_F, cavity_rho_F_and_gradient\n");
 }
 
 void print_help () {
