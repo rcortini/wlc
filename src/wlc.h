@@ -26,6 +26,8 @@
 #define WLC_F_MAX 255.900000
 #define WLC_G_MAX -253.642700
 
+#include <stdio.h>
+
 /* exact formulae */
 double wlc_g_F (double F, double lpb);
 
@@ -55,10 +57,16 @@ double wlc_rho_F_highforce (double F, double lpb);
 
 double wlc_F_rho_highforce (double rho, double lpb);
 
-/* output functions defined in utils.c */
+/* utility functions defined in utils.c */
 void wlc_message (char *text, ...);
 
 void wlc_error (char *text, ...);
+
+FILE *safe_fopen (const char *path, const char *mode);
+
+int safe_realloc (unsigned int new_vector_size, double **vector);
+
+unsigned int read_data (const char *input_file, double *x, double *y, double *sigma);
 
 /* cavity routines for discrete models */
 /* elongation with the cavity method */
