@@ -187,7 +187,7 @@ int main (int argc, char *argv []) {
   }
   else if (strcmp (function_name, "Marko_fit")==0) {
     int fit_result;
-    unsigned int n;
+    unsigned int i, n;
     char *input_file;
     double lp0, L0;
     double *x, *y, *sigma;
@@ -212,7 +212,11 @@ int main (int argc, char *argv []) {
     sigma = (double *) malloc (CHUNK_SIZE * sizeof (double));
 
     /* read data from input stream */
-    n = read_data (input_file, x, y, sigma);
+    n = read_data (input_file, &x, &y, &sigma);
+
+    for (i=0; i<n; i++) {
+      printf ("%f %f %f\n", x[i], y[i], sigma[i]);
+    }
 
     /* fit data to chosen model */
     gsl_vector_set (x_init, 0, lp0);

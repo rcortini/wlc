@@ -76,7 +76,7 @@ int wlc_Marko_fit (size_t n, double *x, double *y, double *sigma, gsl_vector *x_
   wlc_message ("fit status = %s\n", gsl_strerror (fit_result));
 
   /* print fit result if success */
-  if (fit_result==GSL_SUCCESS) {
+  if (fit_result==GSL_SUCCESS || fit_result == GSL_CONTINUE) {
     double chi2 = chi2_from_fit (fit, &fit_pars);
     double dof = n-p;
     double c = GSL_MAX_DBL(1, sqrt(chi2/dof));

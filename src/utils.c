@@ -65,7 +65,7 @@ int safe_realloc (unsigned int new_vector_size, double **vector) {
 
 /* reads data in <x> <y> <sigma> format from input file stream
  * and returns the number of data points that were read */
-unsigned int read_data (const char *input_file, double *x, double *y, double *sigma) {
+unsigned int read_data (const char *input_file, double **x, double **y, double **sigma) {
   unsigned int n, vector_size;
   char word [MAX_LINE_SIZE];
   FILE *f_in = safe_fopen (input_file, "r");
@@ -79,10 +79,14 @@ unsigned int read_data (const char *input_file, double *x, double *y, double *si
 
     /* expand the x, y and sigma arrays if necessary */
     if (n>vector_size-1) {
+      int yes_x, yes_y, yes_sigma;
       vector_size += CHUNK_SIZE;
-      if (!(safe_realloc (vector_size, &x) &&
-	  safe_realloc (vector_size, &y) &&
-	  safe_realloc (vector_size, &sigma))) {
+      
+      yes_x = safe_realloc (vector_size, x);
+      yes_y = safe_realloc (vector_size, y);
+      yes_sigma = safe_realloc (vector_size, sigma);
+
+      if ((yes_x || yes_y || yes_sigma)) {
 	wlc_error ("No more memory!\n");
 	exit (EXIT_FAILURE);
       }
@@ -94,9 +98,9 @@ unsigned int read_data (const char *input_file, double *x, double *y, double *si
     else {
       n_vals = sscanf (word, "%lf %lf %lf\n", &z, &F, &stdv);
       if (n_vals==3) {
-	x [n] = z;
-	y [n] = F;
-	sigma [n] = stdv;
+	(*x) [n] = z;
+	(*y) [n] = F;
+	(*sigma) [n] = stdv;
       }
       else {
 	wlc_error ("Incorrect input file format\n");
