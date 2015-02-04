@@ -79,14 +79,11 @@ unsigned int read_data (const char *input_file, double **x, double **y, double *
 
     /* expand the x, y and sigma arrays if necessary */
     if (n>vector_size-1) {
-      int yes_x, yes_y, yes_sigma;
       vector_size += CHUNK_SIZE;
       
-      yes_x = safe_realloc (vector_size, x);
-      yes_y = safe_realloc (vector_size, y);
-      yes_sigma = safe_realloc (vector_size, sigma);
-
-      if ((yes_x || yes_y || yes_sigma)) {
+      if (safe_realloc (vector_size, x) ||
+          safe_realloc (vector_size, y) ||
+          safe_realloc (vector_size, sigma)) {
 	wlc_error ("No more memory!\n");
 	exit (EXIT_FAILURE);
       }
