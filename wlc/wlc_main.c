@@ -24,7 +24,7 @@
 
 void print_usage (const char *program_name) {
   printf ("Usage: %s [-v] [-T <temperature>] <function> <function arguments>\n", program_name);
-  printf ("\tfunctions available: rho_F, F_rho, cavity_rho_F, cavity_rho_F_and_gradient\n");
+  printf ("\tfunctions available: rho_F, F_rho, rho_F_cavity, rho_F_cavity_and_gradient\n");
 }
 
 void print_help () {
@@ -36,7 +36,7 @@ void print_help () {
   printf ("\trho_F <F> <lpb>: the relative extension as a function of force\n");
   printf ("\n");
   printf ("Cavity theory formulae:\n");
-  printf ("\tcavity_rho_F <F> <bB> <JB>: the relative extension as a function of force\n");
+  printf ("\trho_F_cavity <F> <bB> <JB>: the relative extension as a function of force\n");
   printf ("Options:\n");
   printf ("\t-v: verbose output\n");
   printf ("\t-h: print this help and exit\n");
@@ -133,14 +133,14 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", rho);
   }
-  else if (strcmp (function_name, "cavity_rho_F")==0) {
+  else if (strcmp (function_name, "rho_F_cavity")==0) {
     double rho, JB, bB, F;
 
     /* check that we have sufficient arguments */
     if (optind+3>=argc) {
       wlc_error ("Incorrect usage\n");
       print_usage (program_name);
-      printf ("Usage: wlc [-v] cavity_rho_F <F> <bB> <JB>\n");
+      printf ("Usage: wlc [-v] rho_cavity_F <F> <bB> <JB>\n");
       exit (EXIT_FAILURE);
     }
     /* if temperature was assigned, convert to pN */
@@ -151,7 +151,7 @@ int main (int argc, char *argv []) {
     if (Tflag)
       F /= (K_BOLTZMANN*T*1.e14);
 
-    rho = cavity_rho_F (F, bB, JB);
+    rho = wlc_rho_F_cavity (F, bB, JB);
 
     /* choose how output is given */
     if (vflag)
@@ -159,14 +159,14 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", rho);
   }
-  else if (strcmp (function_name, "cavity_rho_F_and_gradient")==0) {
+  else if (strcmp (function_name, "rho_F_cavity_and_gradient")==0) {
     double rho, JB, bB, F, drho_dbB, drho_dJB, xi_f;
 
     /* check that we have sufficient arguments */
     if (optind+3>=argc) {
       wlc_error ("Incorrect usage\n");
       print_usage (program_name);
-      printf ("Usage: wlc [-v] cavity_rho_F_and_gradient <F> <bB> <JB>\n");
+      printf ("Usage: wlc [-v] rho_F_cavity_and_gradient <F> <bB> <JB>\n");
       exit (EXIT_FAILURE);
     }
     /* if temperature was assigned, convert to pN */
@@ -177,7 +177,7 @@ int main (int argc, char *argv []) {
     if (Tflag)
       F /= (K_BOLTZMANN*T*1.e14);
 
-    rho = cavity_rho_F_and_gradient (F, bB, JB, &drho_dbB, &drho_dJB, &xi_f);
+    rho = wlc_rho_F_cavity_and_gradient (F, bB, JB, &drho_dbB, &drho_dJB, &xi_f);
 
     /* choose how output is given */
     if (vflag)

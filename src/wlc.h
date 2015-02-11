@@ -62,10 +62,10 @@ void wlc_error (char *text, ...);
 
 /* cavity routines for discrete models */
 /* elongation with the cavity method */
-double cavity_rho_F (double, double, double);
+double wlc_rho_F_cavity (double, double, double);
 
 /* elongation gradient and persistence length with the cavity method */
-double cavity_rho_F_and_gradient (double, double, double, double *, double *, double *);
+double wlc_rho_F_cavity_and_gradient (double, double, double, double *, double *, double *);
 
 
 #endif

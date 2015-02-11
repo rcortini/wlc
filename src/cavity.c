@@ -122,39 +122,3 @@ void cavity_iterate_marginal_equations (cavity_workspace *cav_w, double f, doubl
         /* repeat until convergence */
         while(error>__TOL__);
 }
-
-/* compute cavity elongation rho as a function of force F */
-double cavity_rho_F (double f, double bB, double JB){
-  
-    cavity_workspace *cav_w = (cavity_workspace *) cavity_workspace_alloc ();
-    int i = 0;
-    double *P, l=0., Z=0., integral;
-
-    /* initialise cavity workspace */
-
-    cavity_workspace_initialise (cav_w);
-    
-    /*iterate cavity equations to get the exact cavity marginal*/
-    cavity_iterate_marginal_equations (cav_w, f, bB, JB);
-    
-    /* integrate z*t*P(t) over the unit sphere */
-    for (P= cav_w -> marginal; P< cav_w -> marginal+__Ntheta__*__Nphi__; P++){
-        
-        /* evaluate the integral I(t) = exp(J * t*u) *P_c(u) */
-        integral = cavity_integrate_marginal (cav_w, cav_w -> marginal, JB, i*__Ntheta__*__Nphi__);
-        
-        /* get the elongation = t*z * exp(b_B*f * t*z) * I(t)^2, Eq. (11) of Massucci et al. 2014 */
-        l += *(cav_w -> cos_theta+ i/__Nphi__) * exp(f* *(cav_w -> cos_theta+ i/__Nphi__)*bB) * integral*integral * *(cav_w -> w_cos_theta+ i/__Nphi__) * *(cav_w -> w_phi + i%__Nphi__);
-        
-        /* And increase the normalisation Z */
-        Z += exp(f* *(cav_w -> cos_theta+ i/__Nphi__)*bB) * integral*integral * *(cav_w -> w_cos_theta+ i/__Nphi__) * *(cav_w -> w_phi + i%__Nphi__);
-        
-        i++;
-    }
-    
-    /* normalise the elongation */
-    l /= Z;
-    
-    cavity_workspace_free (cav_w);
-    return l;
-}
