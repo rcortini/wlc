@@ -31,8 +31,9 @@ Regimes currently available:
   - interpolation
   - high force
   - cavity
+  - cavity_gradient
 
-Regime cavity is to solve the discrete model in F. A. Massucci et al (2014).
+Regime cavity and cavity_gradient solve the discrete model in F. A. Massucci et al (2014).
 All other regimes are inherent to the model in J. Marko & E. Siggia (1995).
 
 Provides also a program to quickly access to function values, named "wlc"
