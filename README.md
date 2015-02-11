@@ -5,7 +5,9 @@ C library to compute worm-like chain polymer functions, written by
 - **Francesco Alessandro Massucci**, Universitat Rovira i Virgili, Tarragona, Spain
 
 This library provides fast routines to calculate functions
-related to the worm-like chain model of a semi-flexible polymer.
+related to models of a semi-flexible polymer (generally, worm-like chain models).
+Both a continuous model and a discrete model are considered.
+
 
 ## Dependencies
 
@@ -29,6 +31,9 @@ Regimes currently available:
   - interpolation
   - high force
   - cavity
+
+Regime cavity is to solve the discrete model in F. A. Massucci et al (2014).
+All other regimes are inherent to the model in J. Marko & E. Siggia (1995).
 
 Provides also a program to quickly access to function values, named "wlc"
 
