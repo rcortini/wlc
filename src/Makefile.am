@@ -4,6 +4,8 @@ libwlc_la_SOURCES = wlc.c utils.c\
 		    f_root.c f_root.h\
 		    f_min.c f_min.h\
 		    f_deriv.c f_deriv.h\
+		    fdf_fit.c fdf_fit.h\
+		    fit.c fit.h\
 		    cavity_macros.h\
 		    cavity.c cavity.h\
 		    cavity_alloc.c cavity_alloc.h\

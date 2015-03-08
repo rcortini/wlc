@@ -21,6 +21,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "wlc.h"
+#include "fit.h"
 
 void print_usage (const char *program_name) {
   printf ("Usage: %s [-v] [-T <temperature>] <function> <function arguments>\n", program_name);
@@ -185,7 +186,50 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", rho);
   }
+  else if (strcmp (function_name, "Marko_fit")==0) {
+    int fit_result;
+    unsigned int n;
+    char *input_file;
+    double lp0, L0;
+    double *x, *y, *sigma;
+    gsl_vector *x_init = gsl_vector_alloc (2);
 
+    /* check that we have sufficient arguments */
+    if (optind+3>=argc) {
+      wlc_error ("Incorrect usage\n");
+      print_usage (program_name);
+      printf ("Usage: wlc Marko_fit <lp0> <L0> <input_file>\n");
+      exit (EXIT_FAILURE);
+    }
+
+    /* get parameters */
+    lp0 = atof (argv [optind+1]);
+    L0 = atof (argv [optind+2]);
+    input_file = argv [optind+3];
+
+    /* alloc the first chunk of data */
+    x = (double *) malloc (CHUNK_SIZE * sizeof (double));
+    y = (double *) malloc (CHUNK_SIZE * sizeof (double));
+    sigma = (double *) malloc (CHUNK_SIZE * sizeof (double));
+
+    /* read data from input stream */
+    n = read_data (input_file, &x, &y, &sigma);
+
+    /* fit data to chosen model */
+    gsl_vector_set (x_init, 0, lp0);
+    gsl_vector_set (x_init, 1, L0);
+    fit_result = wlc_Marko_fit (n, x, y, sigma, x_init);
+
+    /* TODO : put an error condition on fit_result */
+
+    /* free memory */
+    free (x);
+    free (y);
+    free (sigma);
+    gsl_vector_free (x_init);
+
+    return fit_result;
+  }
   else {
     wlc_error ("Incorrect usage\n");
     print_usage (program_name);
