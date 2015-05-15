@@ -26,6 +26,10 @@
 #define WLC_F_MAX 255.900000
 #define WLC_G_MAX -253.642700
 
+/* useful defines */
+#define CHUNK_SIZE 100
+#define MAX_LINE_SIZE 4096
+
 #include <stdio.h>
 
 /* exact formulae */

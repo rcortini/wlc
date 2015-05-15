@@ -16,15 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FIT_H__
-#define __FIT_H__
-
-/* useful defines */
-#define CHUNK_SIZE 10
-#define MAX_LINE_SIZE 4096
-
-#define FIT(i) gsl_vector_get(fit, i)
-#define ERR(i) sqrt(gsl_matrix_get(covar,i,i))
+#ifndef __FIT_MODELS_H__
+#define __FIT_MODELS_H__
 
 #include <gsl/gsl_vector.h>
 
