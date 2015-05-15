@@ -15,6 +15,7 @@ autom4te.cache/
 config.h
 config.log
 config.status
+configure.lineno
 config.guess
 libtool
 stamp-h1
