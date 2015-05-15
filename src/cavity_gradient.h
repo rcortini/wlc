@@ -55,4 +55,10 @@ typedef struct{
 #include "cavity_gradient_alloc.h"
 #include "cavity_gradient_init.h"
 
+double cavity_integrate_marginal_and_gradient_bB (cavity_gradient_workspace *, double *, double, int);
+
+double cavity_integrate_gradient_JB_marginal (cavity_gradient_workspace *, double *, double *, double, int);
+
+void cavity_iterate_gradient_marginal_equations (cavity_gradient_workspace *, double, double, double);
+
 #endif

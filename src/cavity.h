@@ -43,4 +43,8 @@ typedef struct{
 #include "cavity_alloc.h"
 #include "cavity_init.h"
 
+double cavity_integrate_marginal (cavity_workspace *, double *, double, int);
+
+void cavity_iterate_marginal_equations (cavity_workspace *, double, double, double);
+
 #endif
