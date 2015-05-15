@@ -21,6 +21,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "wlc.h"
+#include "fit-models.h"
 
 void print_usage (const char *program_name) {
   printf ("Usage: %s [-v] [-T <temperature>] <function> <function arguments>\n", program_name);
@@ -185,7 +186,56 @@ int main (int argc, char *argv []) {
     else
       printf ("%.5e\n", rho);
   }
+  else if (strcmp (function_name, "Marko_fit")==0) {
+    int fit_result;
+    unsigned int i, n, cols [3];
+    char *input_file;
+    double lp0, L0;
+    double **data;
+    gsl_vector *x_init = gsl_vector_alloc (2);
+    FILE *f_in;
 
+    /* check that we have sufficient arguments */
+    if (optind+3>=argc) {
+      wlc_error ("Incorrect usage\n");
+      print_usage (program_name);
+      printf ("Usage: wlc Marko_fit <lp0> <L0> <input_file>\n");
+      exit (EXIT_FAILURE);
+    }
+
+    /* get parameters */
+    lp0 = atof (argv [optind+1]);
+    L0 = atof (argv [optind+2]);
+    input_file = argv [optind+3];
+
+    /* read data from input stream */
+    cols [0] = 0;
+    cols [1] = 1;
+    cols [2] = 2;
+    f_in = safe_fopen (input_file, "r");
+    n = read_data (f_in, 3, cols, &data);
+
+    /* if temperature was given, scale the forces
+     * by the energy scale */
+    if (Tflag)
+      for (i=0; i<n; i++)
+	data[1][i] *= K_BOLTZMANN*T*1.e14;
+
+    /* fit data to chosen model */
+    gsl_vector_set (x_init, 0, lp0);
+    gsl_vector_set (x_init, 1, L0);
+    fit_result = wlc_Marko_fit (n, data[0], data[1], data[2], x_init);
+
+    /* free memory */
+    free (data[0]);
+    free (data[1]);
+    free (data[2]);
+    free (data);
+    gsl_vector_free (x_init);
+    fclose (f_in);
+
+    return fit_result;
+  }
   else {
     wlc_error ("Incorrect usage\n");
     print_usage (program_name);
