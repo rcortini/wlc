@@ -188,7 +188,7 @@ int main (int argc, char *argv []) {
   }
   else if (strcmp (function_name, "Marko_fit")==0) {
     int fit_result;
-    unsigned int n, cols [3];
+    unsigned int i, n, cols [3];
     char *input_file;
     double lp0, L0;
     double **data;
@@ -214,6 +214,12 @@ int main (int argc, char *argv []) {
     cols [2] = 2;
     f_in = safe_fopen (input_file, "r");
     n = read_data (f_in, 3, cols, &data);
+
+    /* if temperature was given, scale the forces
+     * by the energy scale */
+    if (Tflag)
+      for (i=0; i<n; i++)
+	data[1][i] *= K_BOLTZMANN*T*1.e14;
 
     /* fit data to chosen model */
     gsl_vector_set (x_init, 0, lp0);
