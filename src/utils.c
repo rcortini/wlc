@@ -19,7 +19,7 @@
 /* #include */
 #include <stdio.h>
 #include <stdarg.h>
-#include "fit.h"
+#include "fit-models.h"
 #include "wlc.h"
 
 /* a function to display a message */

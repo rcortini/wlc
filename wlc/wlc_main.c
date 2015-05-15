@@ -21,7 +21,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "wlc.h"
-#include "fit.h"
+#include "fit-models.h"
 
 void print_usage (const char *program_name) {
   printf ("Usage: %s [-v] [-T <temperature>] <function> <function arguments>\n", program_name);
@@ -209,9 +209,9 @@ int main (int argc, char *argv []) {
     input_file = argv [optind+3];
 
     /* read data from input stream */
-    cols [0] = 1;
-    cols [1] = 2;
-    cols [3] = 3;
+    cols [0] = 0;
+    cols [1] = 1;
+    cols [2] = 2;
     f_in = safe_fopen (input_file, "r");
     n = read_data (f_in, 3, cols, &data);
 
@@ -220,14 +220,13 @@ int main (int argc, char *argv []) {
     gsl_vector_set (x_init, 1, L0);
     fit_result = wlc_Marko_fit (n, data[0], data[1], data[2], x_init);
 
-    /* TODO : put an error condition on fit_result */
-
     /* free memory */
     free (data[0]);
     free (data[1]);
     free (data[2]);
     free (data);
     gsl_vector_free (x_init);
+    fclose (f_in);
 
     return fit_result;
   }

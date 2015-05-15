@@ -16,7 +16,7 @@
 */
 
 #include "wlc.h"
-#include "fit.h"
+#include "fit-models.h"
 #include "fdf_fit.h"
 
 /* model wrappers */
@@ -50,18 +50,16 @@ double wlc_Marko_df (unsigned int i, double z, const gsl_vector *par) {
 
 /* fits data to Marko model */
 int wlc_Marko_fit (size_t n, double *x, double *y, double *sigma, gsl_vector *x_init) {
-  int fit_result, exit_code;
-  const size_t p = x_init->size;
-  struct fdf_fit_parameters fit_pars;
-  gsl_vector *fit = gsl_vector_alloc (p);
-  gsl_matrix *covar = gsl_matrix_alloc (p, p);
+  const size_t npars = x_init->size;
+  nlin_fit_parameters fit_pars;
+  multifit_results *fit_results = multifit_results_alloc (npars);
 
   /* initialize the fitter parameters */
   fit_pars.n = n;
   fit_pars.x = x;
   fit_pars.y = y;
   fit_pars.sigma = sigma;
-  fit_pars.p = p;
+  fit_pars.npars = npars;
   fit_pars.type = gsl_multifit_fdfsolver_lmsder;
   fit_pars.eps_abs = 1.e-4;
   fit_pars.eps_rel = 1.e-4;
@@ -70,26 +68,12 @@ int wlc_Marko_fit (size_t n, double *x, double *y, double *sigma, gsl_vector *x_
   fit_pars.model_df = wlc_Marko_df;
 
   /* now fit */
-  fit_result = fdf_fit (x_init, &fit_pars, fit, covar);
+  nlin_fit (x_init, &fit_pars, fit_results);
 
   /* print exit status */
-  wlc_message ("fit status = %s\n", gsl_strerror (fit_result));
-
-  /* print fit result if success */
-  if (fit_result==GSL_SUCCESS || fit_result == GSL_CONTINUE) {
-    double chi2 = chi2_from_fit (fit, &fit_pars);
-    double dof = n-p;
-    double c = GSL_MAX_DBL(1, sqrt(chi2/dof));
-    wlc_message ("chisq/dof = %g\n",  chi2/dof);
-    wlc_message ("lpb     = %.5f +/- %.5f\n", FIT(0), c*ERR(0));
-    wlc_message ("L       = %.5f +/- %.5f\n", FIT(1), c*ERR(1));
-    exit_code = 0;
-  }
-  else
-    exit_code = 1;
+  print_multifit_results (fit_results, 1);
 
   /* free memory and exit */
-  gsl_vector_free (fit);
-  gsl_matrix_free (covar);
-  return exit_code;
+  multifit_results_free (fit_results);
+  return 0;
 }
