@@ -188,11 +188,12 @@ int main (int argc, char *argv []) {
   }
   else if (strcmp (function_name, "Marko_fit")==0) {
     int fit_result;
-    unsigned int n;
+    unsigned int n, cols [3];
     char *input_file;
     double lp0, L0;
-    double *x, *y, *sigma;
+    double **data;
     gsl_vector *x_init = gsl_vector_alloc (2);
+    FILE *f_in;
 
     /* check that we have sufficient arguments */
     if (optind+3>=argc) {
@@ -207,25 +208,25 @@ int main (int argc, char *argv []) {
     L0 = atof (argv [optind+2]);
     input_file = argv [optind+3];
 
-    /* alloc the first chunk of data */
-    x = (double *) malloc (CHUNK_SIZE * sizeof (double));
-    y = (double *) malloc (CHUNK_SIZE * sizeof (double));
-    sigma = (double *) malloc (CHUNK_SIZE * sizeof (double));
-
     /* read data from input stream */
-    n = read_data (input_file, &x, &y, &sigma);
+    cols [0] = 1;
+    cols [1] = 2;
+    cols [3] = 3;
+    f_in = safe_fopen (input_file, "r");
+    n = read_data (f_in, 3, cols, &data);
 
     /* fit data to chosen model */
     gsl_vector_set (x_init, 0, lp0);
     gsl_vector_set (x_init, 1, L0);
-    fit_result = wlc_Marko_fit (n, x, y, sigma, x_init);
+    fit_result = wlc_Marko_fit (n, data[0], data[1], data[2], x_init);
 
     /* TODO : put an error condition on fit_result */
 
     /* free memory */
-    free (x);
-    free (y);
-    free (sigma);
+    free (data[0]);
+    free (data[1]);
+    free (data[2]);
+    free (data);
     gsl_vector_free (x_init);
 
     return fit_result;

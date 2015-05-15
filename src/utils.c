@@ -63,50 +63,63 @@ int safe_realloc (unsigned int new_vector_size, double **vector) {
   return 0;
 }
 
-/* reads data in <x> <y> <sigma> format from input file stream
- * and returns the number of data points that were read */
-unsigned int read_data (const char *input_file, double **x, double **y, double **sigma) {
-  unsigned int n, vector_size;
+/* reads a vector of ncols columns of data (column number
+ * specified in the cols vector) from a file */
+unsigned int read_data (FILE *f_in, unsigned int ncols, unsigned int *cols, double ***data) {
+  unsigned int i, j, n, vector_size;
   char word [MAX_LINE_SIZE];
-  FILE *f_in = safe_fopen (input_file, "r");
+
+  /* check the "cols" array */
+  for (i=1; i<ncols; i++)
+    if (cols[i]<=cols[i-1]) {
+      wlc_error ("\"cols\" vector must be strictly increasing!\n");
+      exit (EXIT_FAILURE);
+    }
+
+  /* initialize the vectors to read */
+  vector_size = CHUNK_SIZE;
+  *data = (double **) malloc (ncols * (sizeof (double *)));
+  for (i=0; i<ncols; i++)
+    (*data) [i] = (double *) malloc (vector_size * sizeof (double));
 
   /* scan the input file */
-  vector_size = CHUNK_SIZE;
   n = 0;
   while (fgets (word, sizeof (word), f_in) != NULL) { 
-    int n_vals;
-    double z, F, stdv;
+    double val;
 
-    /* expand the x, y and sigma arrays if necessary */
+    /* expand the data array if necessary */
     if (n>vector_size-1) {
       vector_size += CHUNK_SIZE;
-      
-      if (safe_realloc (vector_size, x) ||
-          safe_realloc (vector_size, y) ||
-          safe_realloc (vector_size, sigma)) {
-	wlc_error ("No more memory!\n");
-	exit (EXIT_FAILURE);
-      }
+      for (i=0; i<ncols; i++)
+	if (safe_realloc (vector_size, &(*data) [i])) {
+	  wlc_error ("No more memory!\n");
+	  exit (EXIT_FAILURE);
+	}
     }
 
     /* if it is not a comment, scan a line */
     if (word [0] == '#')
       continue;
     else {
-      n_vals = sscanf (word, "%lf %lf %lf\n", &z, &F, &stdv);
-      if (n_vals==3) {
-	(*x) [n] = z;
-	(*y) [n] = F;
-	(*sigma) [n] = stdv;
-      }
-      else {
-	wlc_error ("Incorrect input file format\n");
-	exit (EXIT_FAILURE);
+      int bytes_now=0, bytes_consumed=0;
+      i=0;
+      j=0;
+      while (i<ncols) {
+	if (sscanf (word+bytes_consumed, "%lf%n", &val, &bytes_now) == 1) {
+	  bytes_consumed += bytes_now;
+	  if (j==cols[i])
+	    (*data) [i++] [n] = val;
+	  j++;
+	}
+	else {
+	  wlc_error ("Error reading column number %d!\n", j);
+	  exit (EXIT_FAILURE);
+	}
       }
       n++;
     }
   }
-  fclose (f_in);
 
+  /* return the number of lines read */
   return n;
 }
