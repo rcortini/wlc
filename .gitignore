@@ -42,3 +42,6 @@ wlc-config
 
 # programs
 wlc/wlc
+
+# python module build directory
+build/
