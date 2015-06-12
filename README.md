@@ -8,6 +8,14 @@ This library provides fast routines to calculate functions
 related to models of a semi-flexible polymer (generally, worm-like chain models).
 Both a continuous model and a discrete model are considered.
 
+*New!* Now includes a Python wrapper that you can install by `python setup.py install` with your favourite options. From within python, you can call the library functions using
+```python
+import pywlc
+rho = 0.1
+lpb = 45.
+F = pywlc.wlc_F_rho (rho, lpb)
+```
+The functions in the python modules have the same names and usages as those in the C library
 
 ## Dependencies
 
